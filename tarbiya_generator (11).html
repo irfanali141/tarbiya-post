@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#1a3a5c"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Tarbiya"/>
+<title>One Minute Tarbiya</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{--gold:#f5a028;--gold-lt:#f5c060;--navy:#1a3a5c;--bg:#f0f2f5;--safe:env(safe-area-inset-bottom,0px);}
+html,body{height:100%;height:100dvh;overflow:hidden;}
+body{background:var(--bg);font-family:'Noto Nastaliq Urdu','Amiri',serif;display:flex;flex-direction:column;}
+.top-bar{background:linear-gradient(135deg,#1a3a5c,#2a5a8c);padding:12px 16px 8px;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.3);text-align:center;}
+.top-bar h1{font-family:'Amiri',serif;font-size:1.1rem;color:var(--gold-lt);letter-spacing:.04em;}
+.top-bar p{font-size:.65rem;color:rgba(255,255,255,.5);margin-top:1px;}
+.tab-bar{background:#1a3a5c;display:flex;border-bottom:2px solid var(--gold);flex-shrink:0;}
+.tb{flex:1;padding:8px 2px 6px;background:none;border:none;color:rgba(255,255,255,.45);font-size:.62rem;font-family:'Noto Nastaliq Urdu',serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tb .ic{font-size:.95rem;line-height:1;}
+.tb.on{color:var(--gold-lt);border-bottom:2px solid var(--gold);margin-bottom:-2px;}
+.pages{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(64px + var(--safe));}
+.page{display:none;padding:12px;}.page.on{display:block;}
+.panel{background:#fff;border-radius:12px;box-shadow:0 1px 8px rgba(0,0,0,.08);overflow:hidden;margin-bottom:12px;}
+.ph{background:linear-gradient(90deg,#1a3a5c,#2a5a8c);color:var(--gold-lt);font-family:'Amiri',serif;font-size:.72rem;letter-spacing:.1em;padding:10px 14px;text-transform:uppercase;}
+.pb{padding:13px;display:flex;flex-direction:column;gap:11px;}
+.field label{display:block;font-size:.7rem;color:#666;margin-bottom:3px;direction:rtl;}
+.field input,.field textarea{width:100%;background:#f8f9fa;border:1.5px solid #e0e0e0;border-radius:8px;padding:10px 11px;color:#222;font-size:.95rem;font-family:'Noto Nastaliq Urdu','Amiri',serif;direction:rtl;outline:none;resize:none;transition:border .2s;-webkit-appearance:none;}
+.field input:focus,.field textarea:focus{border-color:#f5a028;}
+.field textarea{min-height:80px;}
+.logo-up{border:2px dashed #ddd;border-radius:10px;padding:14px;text-align:center;cursor:pointer;position:relative;background:#fafafa;}
+.logo-up input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;}
+.logo-up img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);display:none;margin:0 auto 6px;}
+.logo-up .ic{font-size:1.5rem;color:#ccc;display:block;}
+.logo-up .lb{font-size:.7rem;color:#999;}
+.swatches{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
+.sw{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .2s,border .2s;}
+.sw.on{border-color:#222;transform:scale(1.2);}
+.action-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e8e8e8;padding:8px 12px calc(8px + var(--safe));display:flex;gap:10px;box-shadow:0 -3px 16px rgba(0,0,0,.1);z-index:99;}
+.btn-make{flex:1;padding:12px 6px;background:linear-gradient(135deg,#f5a028,#e08010);border:none;border-radius:10px;color:#fff;font-family:'Amiri',serif;font-size:.9rem;font-weight:700;cursor:pointer;-webkit-appearance:none;}
+.btn-make:active{opacity:.85;}
+.btn-save{flex:1;padding:12px 6px;background:linear-gradient(135deg,#1a3a5c,#2a5a8c);border:none;border-radius:10px;color:#fff;font-family:'Amiri',serif;font-size:.9rem;font-weight:700;cursor:pointer;-webkit-appearance:none;}
+.btn-save:active{opacity:.85;}
+.btn-save:disabled{opacity:.5;}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.82);color:#fff;padding:8px 20px;border-radius:20px;font-size:.78rem;font-family:'Amiri',serif;white-space:nowrap;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+/* Preview post */
+.post-wrap{display:flex;justify-content:center;padding:4px 0 8px;}
+.post-scaler{transform-origin:top center;}
+#post{width:540px;background:#fff;border-radius:16px;overflow:hidden;position:relative;font-family:'Noto Nastaliq Urdu','Amiri',serif;direction:rtl;flex-shrink:0;box-shadow:0 4px 24px rgba(0,0,0,.15);}
+.p-topbar{height:5px;}
+.p-deco{position:absolute;pointer-events:none;top:5px;overflow:hidden;}
+.p-deco-tl{right:0;}.p-deco-tr{left:0;}
+.p-header{display:flex;flex-direction:column;align-items:center;padding:22px 20px 14px;position:relative;z-index:2;}
+.p-badge{background:#fff;border:2px solid #e8e8e8;border-radius:14px;padding:10px 28px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.08);position:relative;}
+.p-badge::before{content:'';position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px rgba(245,160,40,.6);}
+.b-en{font-family:'Amiri',serif;font-size:1.3rem;font-weight:700;color:#1a3a5c;letter-spacing:.08em;line-height:1.1;}
+.p-date{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid #f0f0f0;direction:rtl;}
+.p-date-col{display:flex;flex-direction:column;gap:4px;}
+.p-day-ar{font-size:1rem;color:#333;font-weight:600;}
+.p-day-en{background:var(--gold);color:#fff;font-family:'Amiri',serif;font-size:.85rem;font-weight:700;padding:3px 14px;border-radius:5px;display:inline-block;}
+.p-hdate{background:#1a3a5c;color:#fff;font-family:'Amiri',serif;font-size:.75rem;padding:3px 10px;border-radius:5px;text-align:center;}
+.p-edate{display:flex;align-items:center;gap:6px;font-size:.9rem;color:#333;}
+.p-edate .yr{font-weight:700;color:#1a3a5c;font-family:'Amiri',serif;}
+.p-edate .mo{background:var(--gold);color:#fff;border-radius:20px;padding:2px 12px;font-size:.82rem;font-family:'Amiri',serif;}
+.p-section{margin:14px 20px 6px;display:flex;align-items:center;justify-content:center;}
+.p-section-tag{border:1.5px solid;border-radius:6px;padding:4px 20px;font-size:.82rem;font-weight:600;font-family:'Noto Nastaliq Urdu',serif;}
+.tag-hdaf{border-color:#1a3a5c;color:#1a3a5c;background:#eef3fa;}
+.tag-ayat{border-color:var(--gold);color:#b87800;background:#fffbf0;}
+.p-goal{padding:8px 24px 14px;font-size:1.1rem;color:#111;line-height:2;text-align:right;}
+.p-hadith{margin:0 20px 12px;background:linear-gradient(135deg,#fffdf8,#fff9ee);border:1px solid #f0dea0;border-radius:12px;padding:16px 18px 12px;position:relative;}
+.p-hadith::before{content:'❝';position:absolute;top:-4px;right:14px;font-size:1.8rem;color:var(--gold);opacity:.4;line-height:1;}
+.p-hadith-text{font-size:1rem;color:#222;line-height:2.1;text-align:right;}
+.p-ref{margin-top:8px;text-align:center;}
+.p-ref-tag{display:inline-block;background:var(--gold);color:#fff;font-size:.72rem;border-radius:20px;padding:3px 16px;font-family:'Noto Nastaliq Urdu',serif;}
+.p-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.04;pointer-events:none;width:240px;height:240px;border-radius:50%;object-fit:cover;}
+.p-footer{padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;direction:rtl;}
+.p-footer-info{flex:1;}
+.p-footer-name{font-size:1.15rem;font-weight:700;color:#fff;font-family:'Noto Nastaliq Urdu',serif;}
+.p-footer-addr{font-size:.68rem;color:rgba(255,255,255,.65);line-height:1.8;margin-top:2px;}
+.p-footer-phones{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;}
+.p-footer-phone{font-size:.78rem;color:#1a3a5c;display:flex;align-items:center;gap:6px;direction:ltr;unicode-bidi:isolate;background:#ffffff;border:1.5px solid rgba(255,255,255,.6);border-radius:20px;padding:4px 12px 4px 5px;font-family:'Amiri',serif;font-weight:700;}
+.ph-icon{display:flex;align-items:center;flex-shrink:0;}
+.p-footer-logo{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);flex-shrink:0;display:none;}
+.p-footer-logo-ph{width:60px;height:60px;border-radius:50%;border:2px solid var(--gold);flex-shrink:0;background:#0f2a48;display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:'Amiri',serif;font-size:.6rem;font-weight:700;text-align:center;line-height:1.3;}
+.p-botbar{height:4px;}
+@media(min-width:860px){
+  html,body{height:auto;overflow:auto;}
+  .tab-bar{display:none;}
+  .pages{overflow:visible;padding:0;}
+  .page{display:block !important;}
+  .action-bar{display:none;}
+  body{flex-direction:column;align-items:center;}
+  .top-bar{width:100%;max-width:1100px;border-radius:0 0 14px 14px;padding:18px 32px;}
+  .desktop-wrap{display:flex;gap:24px;max-width:1100px;width:100%;padding:20px 12px 40px;align-items:flex-start;flex-wrap:wrap;justify-content:center;}
+  .col-left{width:320px;flex-shrink:0;display:flex;flex-direction:column;gap:12px;}
+  .col-right{display:flex;flex-direction:column;align-items:center;gap:12px;}
+  .desk-btns{display:flex;flex-direction:column;gap:8px;width:100%;}
+  .btn-make,.btn-save{width:100%;}
+  .post-scaler{transform:none !important;}
+}
+@media(max-width:859px){
+  .desktop-wrap{display:contents;}
+  .col-left,.col-right{display:contents;}
+  .desk-btns{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <h1>✦ One Minute Tarbiya – پوسٹ جنریٹر ✦</h1>
+  <p>تمام معلومات بھریں — پوسٹ خود بخود تیار ہو جائے گی</p>
+</div>
+<div class="tab-bar">
+  <button class="tb on" onclick="goTab('t-title',this)"><span class="ic">📝</span><span>ٹائٹل</span></button>
+  <button class="tb" onclick="goTab('t-date',this)"><span class="ic">📅</span><span>تاریخ</span></button>
+  <button class="tb" onclick="goTab('t-hadith',this)"><span class="ic">📖</span><span>حدیث</span></button>
+  <button class="tb" onclick="goTab('t-inst',this)"><span class="ic">🏫</span><span>ادارہ</span></button>
+  <button class="tb" onclick="goTab('t-preview',this)"><span class="ic">👁️</span><span>پریویو</span></button>
+</div>
+<div class="pages" id="pages">
+<div class="desktop-wrap">
+<div class="col-left">
+
+<div class="page on" id="t-title">
+  <div class="panel"><div class="ph">✦ ٹائٹل / بیج</div><div class="pb">
+    <div class="field"><label>لائن 1</label><input id="b1" value="ONE MINUTE"/></div>
+    <div class="field"><label>لائن 2</label><input id="b2" value="TARBIYA"/></div>
+  </div></div>
+  <div class="panel"><div class="ph">✦ اس ہفتے کا ہدف</div><div class="pb">
+    <div class="field"><label>ہدف لکھیں</label><textarea id="goal">طلبہ اپنی نظروں کی حفاظت کرنے والے بن جائیں۔</textarea></div>
+  </div></div>
+</div>
+
+<div class="page" id="t-date">
+  <div class="panel"><div class="ph">✦ تاریخ</div><div class="pb">
+    <div class="field"><label>دن (اردو)</label><input id="dayAr" value="پیر"/></div>
+    <div class="field"><label>Day (English)</label><input id="dayEn" value="Monday"/></div>
+    <div class="field"><label>اسلامی تاریخ</label><input id="hDate" value="۱۲ ربیع الثانی"/></div>
+    <div class="field"><label>ہجری سال</label><input id="hYear" value="۱۴۴۶ ھ"/></div>
+    <div class="field"><label>عیسوی سال</label><input id="eYear" value="2026"/></div>
+    <div class="field"><label>مہینہ (اردو)</label><input id="eMon" value="مارچ"/></div>
+    <div class="field"><label>تاریخ نمبر</label><input id="eDay" value="06"/></div>
+    <button id="todayBtn" style="width:100%;padding:10px;background:rgba(26,58,92,.07);border:1.5px dashed rgba(26,58,92,.3);border-radius:8px;color:#1a3a5c;font-family:'Noto Nastaliq Urdu',serif;font-size:.82rem;cursor:pointer;">📅 آج کی تاریخ خود سیٹ کریں</button>
+  </div></div>
+</div>
+
+<div class="page" id="t-hadith">
+  <div class="panel"><div class="ph">✦ حدیث / آیت / قول</div><div class="pb">
+    <div class="field"><label>متن</label><textarea id="hadith" style="min-height:130px;">رسول اللہ صلی اللہ علیہ وسلم نے فرمایا: راستوں پر بیٹھنے سے پرہیز کرو! صحابہ نے اپنی مجبوری پیش کی، تو آپ صلی اللہ علیہ وسلم نے فرمایا تم کو جب کوئی مجبوری ہو تو راستے کا حق ادا کرو اور صحابہ نے سوال کیا راستے کا حق کیا ہے؟ آپ صلی اللہ علیہ وسلم نے فرمایا: نگاہ نیچی رکھنا، تکلیف دہ چیز دور کرنا۔</textarea></div>
+    <div class="field"><label>حوالہ</label><input id="ref" value="صحیح البخاری، نمبر: ۹۲۲۹"/></div>
+  </div></div>
+</div>
+
+<div class="page" id="t-inst">
+  <div class="panel"><div class="ph">✦ ادارے کی معلومات</div><div class="pb">
+    <div class="field"><label>لوگو</label>
+      <div class="logo-up"><input type="file" id="logoInp" accept="image/*"/>
+        <img id="logoPrev"/><span class="ic" id="logoIco">🖼️</span><span class="lb" id="logoLbl">تصویر منتخب کریں</span>
+      </div>
+    </div>
+    <div class="field"><label>ادارے کا نام</label><input id="instName" value="امین اسلامک انسٹیٹیوٹ"/></div>
+    <div class="field"><label>نمایاں لفظ (سنہری)</label><input id="instHL" value="انسٹیٹیوٹ"/></div>
+    <div class="field"><label>پتہ</label><textarea id="instAddr">بوائز کیمپس: مدین روڈ نوے کیلی سوات - گرلز کیمپس: مدین روڈ شین نالئی قلعہ سوات</textarea></div>
+    <div class="field"><label>فون 1</label><input id="ph1" value="0340 8009911" style="direction:ltr;text-align:left;"/></div>
+    <div class="field"><label>فون 2</label><input id="ph2" value="0340 1188800" style="direction:ltr;text-align:left;"/></div>
+    <div class="field"><label>تھیم</label><div class="swatches" id="swatches"></div></div>
+  </div></div>
+  <div class="desk-btns">
+    <button class="btn-make" onclick="render()">✦ پوسٹ بنائیں</button>
+    <button class="btn-save" id="dlBtnDesk">📷 JPG ڈاؤنلوڈ کریں</button>
+    <div id="statusDesk" style="font-size:.75rem;text-align:center;min-height:18px;color:#666;font-family:'Amiri',serif;margin-top:4px;"></div>
+  </div>
+</div>
+
+</div><!-- col-left -->
+<div class="col-right">
+<div class="page" id="t-preview">
+  <div class="post-wrap"><div class="post-scaler" id="postScaler">
+    <div id="post">
+      <div class="p-topbar" id="ptb"></div>
+      <div class="p-deco p-deco-tl" id="pdtl"></div>
+      <div class="p-deco p-deco-tr" id="pdtr"></div>
+      <div class="p-header"><div class="p-badge">
+        <div class="b-en" id="pb1">ONE MINUTE</div>
+        <div class="b-en" id="pb2">TAR<span>BIYA</span></div>
+      </div></div>
+      <div class="p-date">
+        <div class="p-date-col">
+          <div class="p-day-ar" id="pdayAr">پیر</div>
+          <div class="p-day-en" id="pdayEn">Monday</div>
+        </div>
+        <div class="p-date-col" style="align-items:center;">
+          <div class="p-hdate" id="phDate">۱۲ ربیع الثانی</div>
+          <div class="p-hdate" id="phYear" style="margin-top:3px;">۱۴۴۶ ھ</div>
+        </div>
+        <div class="p-date-col" style="align-items:flex-start;">
+          <div class="p-edate"><span class="yr" id="peYear">2026</span></div>
+          <div class="p-edate" style="margin-top:3px;">
+            <span class="mo" id="peMon">مارچ</span>
+            <span id="peDay" style="font-weight:700;color:#1a3a5c;font-size:1.1rem;">06</span>
+          </div>
+        </div>
+      </div>
+      <div class="p-section"><div class="p-section-tag tag-hdaf">اس ہفتے کا ہدف</div></div>
+      <div class="p-goal" id="pgoal"></div>
+      <div class="p-section"><div class="p-section-tag tag-ayat">آج کی آیات/احادیث/اقوال</div></div>
+      <div class="p-hadith">
+        <div class="p-hadith-text" id="phadith"></div>
+        <div class="p-ref"><span class="p-ref-tag" id="pref"></span></div>
+      </div>
+      <img class="p-watermark" id="pwm" src="" style="display:none"/>
+      <div class="p-footer" id="pfooter">
+        <div class="p-footer-info">
+          <div class="p-footer-name" id="pname"></div>
+          <div class="p-footer-addr" id="paddr"></div>
+          <div class="p-footer-phones">
+            <div class="p-footer-phone"><span class="ph-icon" id="phIcon1"></span><span id="pph1"></span></div>
+            <div class="p-footer-phone"><span class="ph-icon" id="phIcon2"></span><span id="pph2"></span></div>
+          </div>
+        </div>
+        <div><img class="p-footer-logo" id="pflogo"/><div class="p-footer-logo-ph" id="pflogoP">AII</div></div>
+      </div>
+      <div class="p-botbar" id="pbb"></div>
+    </div>
+  </div></div>
+</div>
+</div><!-- col-right -->
+</div></div>
+
+<div class="toast" id="toast"></div>
+<div class="action-bar">
+  <button class="btn-make" onclick="render();goTab('t-preview',document.querySelectorAll('.tb')[4])">✦ پوسٹ بنائیں</button>
+  <button class="btn-save" id="dlBtn" disabled>📷 JPG محفوظ کریں</button>
+</div>
+
+<script>
+// ── Tabs ──
+function goTab(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  if(btn)btn.classList.add('on');
+  document.getElementById('pages').scrollTop=0;
+}
+// ── Toast ──
+function showToast(msg,color='rgba(0,0,0,.82)',dur=3500){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.background=color;
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid=setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+// ── State ──
+let logoDataURL='', curTheme=0;
+const themes=[
+  {navy:'#1a3a5c',gold:'#f5a028',goldlt:'#f5c060'},
+  {navy:'#1a4a2a',gold:'#28a050',goldlt:'#60c078'},
+  {navy:'#4a1a1a',gold:'#c03020',goldlt:'#e05040'},
+  {navy:'#3a1a4a',gold:'#8030c0',goldlt:'#a060e0'},
+  {navy:'#1a3a4a',gold:'#2090b0',goldlt:'#40b0d0'},
+  {navy:'#3a3010',gold:'#c09010',goldlt:'#e0c030'},
+];
+const tColors=['#1a3a5c','#1a4a2a','#4a1a1a','#3a1a4a','#1a3a4a','#3a3010'];
+
+// Swatches
+const swC=document.getElementById('swatches');
+themes.forEach((t,i)=>{
+  const b=document.createElement('div');
+  b.className='sw'+(i===0?' on':'');
+  b.style.background=tColors[i];
+  b.onclick=()=>{curTheme=i;document.querySelectorAll('.sw').forEach((x,j)=>x.classList.toggle('on',j===i));render();saveForm();};
+  swC.appendChild(b);
+});
+
+// Logo upload
+document.getElementById('logoInp').addEventListener('change',function(){
+  const f=this.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    logoDataURL=e.target.result;
+    document.getElementById('logoPrev').src=logoDataURL;
+    document.getElementById('logoPrev').style.display='block';
+    document.getElementById('logoIco').style.display='none';
+    document.getElementById('logoLbl').textContent='تبدیل کریں';
+    render();
+  };
+  r.readAsDataURL(f);
+});
+
+function v(id){return document.getElementById(id).value;}
+
+// ── Scale preview ──
+function scalePost(){
+  const scaler=document.getElementById('postScaler');
+  const avail=Math.min(window.innerWidth-24,540);
+  const sc=avail/540;
+  scaler.style.transform=`scale(${sc})`;
+  scaler.style.width='540px';
+  scaler.parentElement.style.height=(document.getElementById('post').offsetHeight*sc+16)+'px';
+}
+
+// ── Deco SVGs ──
+function getDecoSVG(i,n,g,gl,fl){
+  const fns=[
+    (n,g,gl,fl)=>`<svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg"><polygon points="${fl?'0,0 130,0 130,130':'0,0 130,0 0,130'}" fill="${n}" opacity=".92"/><circle cx="${fl?105:25}" cy="105" r="55" fill="none" stroke="${g}" stroke-width="2.5" opacity=".5"/><circle cx="${fl?105:25}" cy="105" r="38" fill="none" stroke="${gl}" stroke-width="1.2" opacity=".35"/><circle cx="${fl?95:35}" cy="28" r="6" fill="${g}" opacity=".7"/><circle cx="${fl?95:35}" cy="28" r="3" fill="${gl}"/></svg>`,
+    (n,g,gl,fl)=>{const s=(cx,cy,r,c,o)=>{let p=[];for(let i=0;i<16;i++){const a=i*Math.PI/8-Math.PI/2,rd=i%2===0?r:r*.55;p.push(`${(cx+Math.cos(a)*rd).toFixed(1)},${(cy+Math.sin(a)*rd).toFixed(1)}`);}return`<polygon points="${p.join(' ')}" fill="${c}" opacity="${o}"/>`;};return`<svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg"><polygon points="${fl?'0,0 130,0 130,130':'0,0 130,0 0,130'}" fill="${n}" opacity=".9"/>${s(fl?88:42,72,46,g,.55)}${s(fl?88:42,72,30,gl,.3)}<circle cx="${fl?88:42}" cy="72" r="8" fill="${gl}" opacity=".5"/></svg>`;},
+    (n,g,gl,fl)=>`<svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg"><polygon points="${fl?'0,0 130,0 130,130':'0,0 130,0 0,130'}" fill="${n}" opacity=".9"/><path d="${fl?'M130,0 Q100,30 80,60 Q60,90 50,130':'M0,0 Q30,30 50,60 Q70,90 80,130'}" fill="none" stroke="${g}" stroke-width="2.5" opacity=".55"/><path d="${fl?'M130,0 Q110,20 95,45 Q78,72 70,130':'M0,0 Q20,20 35,45 Q52,72 60,130'}" fill="none" stroke="${gl}" stroke-width="1.5" opacity=".4"/><circle cx="${fl?108:22}" cy="22" r="8" fill="${g}" opacity=".5"/></svg>`,
+    (n,g,gl,fl)=>{const d=(cx,cy,r,c,o)=>`<polygon points="${cx},${cy-r} ${cx+r*.6},${cy} ${cx},${cy+r} ${cx-r*.6},${cy}" fill="${c}" opacity="${o}"/>`;return`<svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg"><polygon points="${fl?'0,0 130,0 130,130':'0,0 130,0 0,130'}" fill="${n}" opacity=".9"/>${d(fl?95:35,35,22,g,.55)}${d(fl?75:55,65,15,gl,.4)}${d(fl?108:22,85,10,g,.3)}</svg>`;},
+    (n,g,gl,fl)=>`<svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg"><polygon points="${fl?'0,0 130,0 130,130':'0,0 130,0 0,130'}" fill="${n}" opacity=".9"/><circle cx="${fl?100:30}" cy="30" r="40" fill="none" stroke="${g}" stroke-width="2" opacity=".45"/><circle cx="${fl?100:30}" cy="30" r="26" fill="none" stroke="${gl}" stroke-width="1.5" opacity=".35"/><circle cx="${fl?70:60}" cy="80" r="25" fill="none" stroke="${g}" stroke-width="1.5" opacity=".3"/></svg>`,
+    (n,g,gl,fl)=>`<svg width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg"><polygon points="${fl?'0,0 130,0 130,130':'0,0 130,0 0,130'}" fill="${n}" opacity=".92"/>${[0,8,16,24,32].map(o=>`<line x1="${fl?130-o:o}" y1="0" x2="${fl?130:0}" y2="${130-o}" stroke="${o%16===0?g:gl}" stroke-width="${o%16===0?1.8:1}" opacity="${o%16===0?.5:.28}"/>`).join('')}<circle cx="${fl?108:22}" cy="20" r="8" fill="${g}" opacity=".5"/></svg>`,
+  ];
+  return fns[i](n,g,gl,fl);
+}
+
+// ── Render preview ──
+function render(){
+  const {navy,gold,goldlt}=themes[curTheme];
+  document.getElementById('ptb').style.background=`linear-gradient(90deg,${navy},${gold},${goldlt},${gold},${navy})`;
+  document.getElementById('pbb').style.background=`linear-gradient(90deg,${gold},${goldlt},${gold})`;
+  const dl=document.getElementById('pdtl'),dr=document.getElementById('pdtr');
+  dl.innerHTML=getDecoSVG(curTheme,navy,gold,goldlt,false);dl.style.cssText+='width:130px;height:130px;';
+  dr.innerHTML=getDecoSVG(curTheme,navy,gold,goldlt,true);dr.style.cssText+='width:130px;height:130px;';
+  document.getElementById('pb1').textContent=v('b1');
+  const b2=v('b2'),mid=Math.ceil(b2.length/2);
+  document.getElementById('pb2').innerHTML=b2.slice(0,mid)+`<span style="color:${gold}">${b2.slice(mid)}</span>`;
+  document.getElementById('pdayAr').textContent=v('dayAr');
+  document.getElementById('pdayEn').textContent=v('dayEn');document.getElementById('pdayEn').style.background=gold;
+  document.getElementById('phDate').textContent=v('hDate');document.getElementById('phDate').style.background=navy;
+  document.getElementById('phYear').textContent=v('hYear');document.getElementById('phYear').style.background=navy;
+  document.getElementById('peYear').textContent=v('eYear');document.getElementById('peYear').style.color=navy;
+  document.getElementById('peMon').textContent=v('eMon');document.getElementById('peMon').style.background=gold;
+  document.getElementById('peDay').textContent=v('eDay');document.getElementById('peDay').style.color=navy;
+  document.getElementById('pgoal').textContent=v('goal');
+  document.getElementById('phadith').textContent=v('hadith');
+  document.getElementById('pref').textContent=v('ref');document.getElementById('pref').style.background=gold;
+  document.querySelector('.p-hadith').style.borderColor=gold+'88';
+  document.querySelector('.p-hadith').style.background=`linear-gradient(135deg,${gold}08,${gold}03)`;
+  document.querySelector('.tag-hdaf').style.cssText+=`;border-color:${navy};color:${navy};background:${navy}14;`;
+  document.querySelector('.tag-ayat').style.cssText+=`;border-color:${gold};`;
+  document.getElementById('pfooter').style.background=`linear-gradient(90deg,${navy},${navy}dd,${navy})`;
+  const nm=v('instName'),hl=v('instHL');
+  document.getElementById('pname').innerHTML=hl&&nm.includes(hl)?nm.replace(hl,`<span style="color:${goldlt}">${hl}</span>`):nm;
+  document.getElementById('pname').style.color='#fff';
+  document.getElementById('paddr').textContent=v('instAddr');
+  document.getElementById('pph1').textContent=v('ph1');document.getElementById('pph2').textContent=v('ph2');
+  const phSVG=c=>`<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="12" fill="${c}"/><path d="M6.5 4h3l1.5 4-1.75 1.75c.95 1.9 2.55 3.5 4.5 4.5L15.5 12.5l4 1.5v3c0 1.1-.9 2-2 2C8.96 19 5 15.04 5 10.5c0-3.59 2.91-6.5 6.5-6.5z" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`;
+  document.getElementById('phIcon1').innerHTML=phSVG(navy);
+  document.getElementById('phIcon2').innerHTML=phSVG(navy);
+  document.querySelectorAll('.p-footer-phone').forEach(el=>{
+    el.style.background='#ffffff';
+    el.style.borderColor='rgba(255,255,255,.5)';
+    el.style.color=navy;
+  });
+  if(logoDataURL){
+    document.getElementById('pflogo').src=logoDataURL;document.getElementById('pflogo').style.display='block';
+    document.getElementById('pflogo').style.borderColor=gold;document.getElementById('pflogoP').style.display='none';
+    document.getElementById('pwm').src=logoDataURL;document.getElementById('pwm').style.display='block';
+  }else{
+    document.getElementById('pflogo').style.display='none';
+    document.getElementById('pflogoP').style.display='flex';document.getElementById('pflogoP').style.borderColor=gold;
+    document.getElementById('pwm').style.display='none';
+  }
+  document.getElementById('dlBtn').disabled=false;
+  document.getElementById('dlBtnDesk').disabled=false;
+  setTimeout(scalePost,50);
+  saveForm();
+}
+
+// ════════════════════════════════════════════════════
+//  JPG EXPORT — html2canvas on unscaled #post
+// ════════════════════════════════════════════════════
+async function doJPG(statusEl){
+  document.querySelectorAll('.btn-save').forEach(b=>b.disabled=true);
+  showToast('⏳ تصویر تیار ہو رہی ہے...');
+
+  const post   = document.getElementById('post');
+  const scaler = document.getElementById('postScaler');
+
+  // Save original state
+  const origTransform = scaler.style.transform;
+  const origWidth     = scaler.style.width;
+  const origWrapH     = scaler.parentElement ? scaler.parentElement.style.height : '';
+  const origParent    = scaler.parentElement;
+  const placeholder   = document.createElement('div');
+  origParent.insertBefore(placeholder, scaler);
+
+  // Move post to body at full size, hidden off-screen
+  scaler.style.transform = 'none';
+  scaler.style.width     = '540px';
+  scaler.style.position  = 'fixed';
+  scaler.style.left      = '-9999px';
+  scaler.style.top       = '0';
+  scaler.style.zIndex    = '-1';
+  scaler.style.visibility= 'visible';
+  document.body.appendChild(scaler);
+
+  // Also reset any border-radius / shadow on post for clean capture
+  const origRadius = post.style.borderRadius;
+  const origShadow = post.style.boxShadow;
+  post.style.borderRadius = '0';
+  post.style.boxShadow    = 'none';
+
+  await document.fonts.ready;
+  await new Promise(r => setTimeout(r, 400));
+
+  try {
+    const canvas = await html2canvas(post, {
+      scale          : 3,
+      useCORS        : true,
+      allowTaint     : true,
+      backgroundColor: '#ffffff',
+      logging        : false,
+      width          : 540,
+      height         : post.scrollHeight,
+      windowWidth    : 540,
+      scrollX        : 0,
+      scrollY        : 0,
+      x              : 0,
+      y              : 0,
+    });
+
+    // Restore everything
+    post.style.borderRadius = origRadius;
+    post.style.boxShadow    = origShadow;
+    origParent.insertBefore(scaler, placeholder);
+    origParent.removeChild(placeholder);
+    scaler.style.position  = '';
+    scaler.style.left      = '';
+    scaler.style.top       = '';
+    scaler.style.zIndex    = '';
+    scaler.style.visibility= '';
+    scaler.style.transform = origTransform;
+    scaler.style.width     = origWidth;
+    if (origWrapH !== undefined) scaler.parentElement.style.height = origWrapH;
+
+    // Rounded-corner final canvas
+    const fc  = document.createElement('canvas');
+    fc.width  = canvas.width;
+    fc.height = canvas.height;
+    const ctx = fc.getContext('2d');
+    const r   = 16 * 3;
+    ctx.beginPath();
+    ctx.moveTo(r,0); ctx.lineTo(fc.width-r,0);
+    ctx.quadraticCurveTo(fc.width,0,fc.width,r);
+    ctx.lineTo(fc.width,fc.height-r);
+    ctx.quadraticCurveTo(fc.width,fc.height,fc.width-r,fc.height);
+    ctx.lineTo(r,fc.height); ctx.quadraticCurveTo(0,fc.height,0,fc.height-r);
+    ctx.lineTo(0,r); ctx.quadraticCurveTo(0,0,r,0);
+    ctx.closePath(); ctx.clip();
+    ctx.drawImage(canvas,0,0);
+
+    const now = new Date();
+    const fn  = `Tarbiya_${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}.jpg`;
+    const a   = document.createElement('a');
+    a.download = fn;
+    a.href     = fc.toDataURL('image/jpeg', 0.95);
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+
+    showToast(`✅ محفوظ! ${fc.width}×${fc.height}px`, 'rgba(20,100,20,.9)');
+    if (statusEl) statusEl.textContent = `✅ ${fn}`;
+
+  } catch(err) {
+    console.error(err);
+    // Restore on error too
+    post.style.borderRadius = origRadius;
+    post.style.boxShadow    = origShadow;
+    try {
+      origParent.insertBefore(scaler, placeholder);
+      origParent.removeChild(placeholder);
+    } catch(e) {}
+    scaler.style.position  = '';
+    scaler.style.left      = '';
+    scaler.style.top       = '';
+    scaler.style.zIndex    = '';
+    scaler.style.visibility= '';
+    scaler.style.transform = origTransform;
+    scaler.style.width     = origWidth;
+    showToast('❌ خرابی آئی، دوبارہ کوشش کریں', 'rgba(160,20,20,.9)', 5000);
+  }
+
+  document.querySelectorAll('.btn-save').forEach(b => b.disabled = false);
+  setTimeout(scalePost, 100);
+}
+
+document.getElementById('dlBtn').onclick=()=>doJPG(null);
+document.getElementById('dlBtnDesk').onclick=()=>doJPG(document.getElementById('statusDesk'));
+
+// ── Today date ──
+document.getElementById('todayBtn').onclick=function(){
+  const now=new Date();
+  const ud=['اتوار','پیر','منگل','بدھ','جمعرات','جمعہ','ہفتہ'];
+  const ed=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const um=['جنوری','فروری','مارچ','اپریل','مئی','جون','جولائی','اگست','ستمبر','اکتوبر','نومبر','دسمبر'];
+  document.getElementById('dayAr').value=ud[now.getDay()];
+  document.getElementById('dayEn').value=ed[now.getDay()];
+  document.getElementById('eYear').value=now.getFullYear();
+  document.getElementById('eMon').value=um[now.getMonth()];
+  document.getElementById('eDay').value=String(now.getDate()).padStart(2,'0');
+  render();showToast('✅ آج کی تاریخ سیٹ ہو گئی!','rgba(26,58,92,.9)');
+};
+
+// ── Persist ──
+const SK=['b1','b2','dayAr','dayEn','hDate','hYear','eYear','eMon','eDay','goal','hadith','ref','instName','instHL','instAddr','ph1','ph2'];
+function saveForm(){try{const d={theme:curTheme};SK.forEach(k=>d[k]=v(k));localStorage.setItem('tarbiya_v2',JSON.stringify(d));}catch(e){}}
+function loadForm(){try{const raw=localStorage.getItem('tarbiya_v2');if(!raw)return false;const d=JSON.parse(raw);SK.forEach(k=>{if(d[k]!==undefined)document.getElementById(k).value=d[k];});if(d.theme!==undefined){curTheme=d.theme;document.querySelectorAll('.sw').forEach((s,i)=>s.classList.toggle('on',i===curTheme));}return true;}catch(e){return false;}}
+SK.forEach(id=>document.getElementById(id).addEventListener('input',()=>render()));
+
+loadForm();render();
+window.addEventListener('resize',scalePost);
+</script>
+</body>
+</html>
